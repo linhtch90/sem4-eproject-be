@@ -51,7 +51,9 @@ public class FaqController {
     public ResponseModel removeFaqById(@RequestBody IdModel idModel) {
         Optional<FaqEntity> faq = faqService.getFaqById(idModel);
         if (faq.isPresent()) {
-            faqService.removeFaqById(idModel);
+            FaqEntity deletedFaq = faq.get();
+            deletedFaq.setDeleted(true);
+            faqService.updateFaq(deletedFaq);
             return new ResponseModel("ok", "success", null);
         } else {
             return new ResponseModel("fail", "Cannot find faq id: " + idModel.getId(), null);

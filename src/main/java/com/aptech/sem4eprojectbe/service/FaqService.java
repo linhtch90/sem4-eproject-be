@@ -44,7 +44,4 @@ public class FaqService {
                 });
     }
 
-    public void removeFaqById(IdModel idModel) {
-        faqRepository.deleteById(idModel.getId());
-    }
 }
