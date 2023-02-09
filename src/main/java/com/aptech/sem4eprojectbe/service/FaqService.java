@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aptech.sem4eprojectbe.common.model.IdModel;
-import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.FaqEntity;
 import com.aptech.sem4eprojectbe.repository.FaqRepository;
 
@@ -33,6 +32,7 @@ public class FaqService {
                 .map(faqItem -> {
                     faqItem.setQuestion(faq.getQuestion());
                     faqItem.setAnswer(faq.getAnswer());
+                    faqItem.setDeleted(faq.getDeleted());
                     return faqRepository.save(faqItem);
                 })
                 .orElseGet(() -> {
