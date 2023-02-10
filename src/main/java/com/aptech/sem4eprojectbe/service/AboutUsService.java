@@ -21,7 +21,7 @@ public class AboutUsService {
     }
 
     public List<AboutUsEntity> getAllAboutUs() {
-        return aboutUsRepository.findAll();
+        return aboutUsRepository.findByDeletedIsFalse();
     }
 
     public Optional<AboutUsEntity> getAboutUsById(IdModel idModel) {

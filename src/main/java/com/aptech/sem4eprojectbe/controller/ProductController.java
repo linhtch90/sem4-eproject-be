@@ -36,7 +36,7 @@ public class ProductController {
     @GetMapping("/getProductById")
     public ResponseModel getProductById(@RequestBody IdModel idModel){
         Optional<ProductEntity> product = productService.getProductById(idModel);
-        if(product.isPresent()){
+        if(product.isPresent() && !product.get().getDeleted()){
             return new ResponseModel("ok", "success", product);
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);

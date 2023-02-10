@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public List<UserEntity> getAllUsers(){
-        return userRepository.findAll();
+        return userRepository.findByDeletedIsFalse();
     }
 
     public Optional<UserEntity> getUserById(IdModel idModel){

@@ -37,7 +37,7 @@ public class CategoryController {
     @GetMapping("/getCategoryById")
     public ResponseModel getCategoryById(@RequestBody IdModel idModel){
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
-        if(cate.isPresent()){
+        if(cate.isPresent() && !cate.get().getDeleted()){
             return new ResponseModel("ok", "success", cate.get());
         } else {
             return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);

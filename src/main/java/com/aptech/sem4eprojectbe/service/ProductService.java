@@ -20,7 +20,7 @@ public class ProductService {
     }
 
     public List<ProductEntity> getAllProduct(){
-        return productRepository.findAll();
+        return productRepository.findByDeletedIsFalse();
     }
     
     public Optional<ProductEntity> getProductById(IdModel  idModel){

@@ -37,7 +37,7 @@ public class UserController {
     @GetMapping("/getUserById")
     public ResponseModel getUserById(@RequestBody IdModel idModel){
         Optional<UserEntity> user = userService.getUserById(idModel);
-        if(user.isPresent()){
+        if(user.isPresent() && !user.get().getDeleted()){
             return new ResponseModel("ok", "success", user.get());
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);

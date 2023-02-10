@@ -36,7 +36,7 @@ public class AboutUsController {
     @GetMapping("/getAboutUsById")
     public ResponseModel getAboutUsById(@RequestBody IdModel idModel){
         Optional<AboutUsEntity> aboutUs = aboutUsService.getAboutUsById(idModel);
-        if(aboutUs.isPresent()){
+        if(aboutUs.isPresent() && !aboutUs.get().getDeleted()){
             return new ResponseModel("ok", "success", aboutUs.get());
         } else {
             return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);

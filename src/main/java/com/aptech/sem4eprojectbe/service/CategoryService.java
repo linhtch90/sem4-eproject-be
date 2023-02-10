@@ -20,7 +20,7 @@ public class CategoryService {
     }
 
     public List<CategoryEntity> getAllCategory() {
-        return categoryRepository.findAll();
+        return categoryRepository.findByDeletedIsFalse();
     }
 
     public Optional<CategoryEntity> getCategoryById(IdModel idModel) {
@@ -31,7 +31,7 @@ public class CategoryService {
         return categoryRepository.findById(category.getId())
         .map(categoryItem -> {
             categoryItem.setName(category.getName());
-            // categoryItem.setDeleted(category.getDeleted());
+            categoryItem.setDeleted(category.getDeleted());
             return categoryRepository.save(categoryItem);
         })
         .orElseGet(() ->{

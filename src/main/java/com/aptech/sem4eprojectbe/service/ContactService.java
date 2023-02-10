@@ -22,7 +22,7 @@ public class ContactService {
     }
 
     public List<ContactEntity> getAllContacts(){
-        return contactRepository.findAll();
+        return contactRepository.findByDeletedIsFalse();
     }
 
     public Optional<ContactEntity> getContactById(IdModel idModel){

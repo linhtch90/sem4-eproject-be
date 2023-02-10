@@ -38,7 +38,7 @@ public class ContactController {
     @GetMapping("/getContactById")
     public ResponseModel getContactById(@RequestBody IdModel idModel){
             Optional<ContactEntity> contact = contactService.getContactById(idModel);
-            if(contact.isPresent()){
+            if(contact.isPresent() && !contact.get().getDeleted()){
                 return new ResponseModel("ok", "success", contact.get());
             } else {
                 return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);
