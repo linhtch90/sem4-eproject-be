@@ -20,7 +20,7 @@ public class FaqService {
     }
 
     public List<FaqEntity> getAllFaqs() {
-        return faqRepository.findAll();
+        return faqRepository.findByDeletedIsFalse();
     }
 
     public Optional<FaqEntity> getFaqById(IdModel idModel) {

@@ -35,7 +35,7 @@ public class FaqController {
     @GetMapping("/faq")
     public ResponseModel getFaqById(@RequestBody IdModel idModel) {
         Optional<FaqEntity> faq = faqService.getFaqById(idModel);
-        if (faq.isPresent()) {
+        if (faq.isPresent() && !faq.get().getDeleted()) {
             return new ResponseModel("ok", "success", faq.get());
         } else {
             return new ResponseModel("fail", "Cannot find faq id: " + idModel.getId(), null);
