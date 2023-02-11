@@ -28,12 +28,12 @@ public class ProductController {
         return new ResponseModel("ok", "success", productService.insertProduct(product));
     }
 
-    @GetMapping("/getAllProducts")
+    @GetMapping("/products")
     public ResponseModel getAllProducts(){
         return new ResponseModel("ok", "success", productService.getAllProduct());
     }
 
-    @GetMapping("/getProductById")
+    @GetMapping("/product")
     public ResponseModel getProductById(@RequestBody IdModel idModel){
         Optional<ProductEntity> product = productService.getProductById(idModel);
         if(product.isPresent() && !product.get().getDeleted()){
@@ -43,12 +43,12 @@ public class ProductController {
         }
     }
 
-    @PutMapping("/updateProduct")
+    @PutMapping("/update-product")
     public ResponseModel updateProduct(@RequestBody ProductEntity product){
         return new ResponseModel("ok", "success", productService.updateProductEntity(product));
     }
 
-    @DeleteMapping("/deleteProduct")
+    @DeleteMapping("/delete-product")
     public ResponseModel deleteProduct(@RequestBody IdModel idModel){
         Optional<ProductEntity> product = productService.getProductById(idModel);
         if(product.isPresent()){

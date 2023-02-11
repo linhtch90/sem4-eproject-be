@@ -2,7 +2,6 @@ package com.aptech.sem4eprojectbe.controller;
 
 import java.util.Optional;
 
-import org.hibernate.ReplicationMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,12 +28,12 @@ public class CategoryController {
 
     }
 
-    @GetMapping("/getAllCategory")
+    @GetMapping("/categories")
     public ResponseModel getAllCategory(){
         return new ResponseModel("ok ", "success", categoryService.getAllCategory());
     }
 
-    @GetMapping("/getCategoryById")
+    @GetMapping("/category")
     public ResponseModel getCategoryById(@RequestBody IdModel idModel){
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
         if(cate.isPresent() && !cate.get().getDeleted()){
@@ -44,12 +43,12 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/updateCategory")
+    @PutMapping("/update-category")
     public ResponseModel updateCategory(@RequestBody CategoryEntity category){
         return new ResponseModel("ok", "success", categoryService.updateCategory(category));
     }    
 
-    @DeleteMapping("/deleteCategory")
+    @DeleteMapping("/delete-category")
     public ResponseModel deleteCategory(@RequestBody IdModel idModel){
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
         if(cate.isPresent()){

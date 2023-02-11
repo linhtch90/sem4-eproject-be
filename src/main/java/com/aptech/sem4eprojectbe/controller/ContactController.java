@@ -1,6 +1,5 @@
 package com.aptech.sem4eprojectbe.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,46 +14,46 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.ContactEntity;
-import com.aptech.sem4eprojectbe.repository.ContactRepository;
+
 import com.aptech.sem4eprojectbe.service.ContactService;
 
 @RestController
 @RequestMapping("/api/v1")
 public class ContactController {
-    
+
     @Autowired
     private ContactService contactService;
 
     @PostMapping("/insert-contact")
-    public ResponseModel inserContact(@RequestBody ContactEntity contact){
+    public ResponseModel inserContact(@RequestBody ContactEntity contact) {
         return new ResponseModel("ok", "success", contactService.insertContact(contact));
     }
 
-    @GetMapping("/getAllContacts")
-    public ResponseModel getAllContact(){
+    @GetMapping("/contacts")
+    public ResponseModel getAllContact() {
         return new ResponseModel("ok", "success", contactService.getAllContacts());
     }
 
-    @GetMapping("/getContactById")
-    public ResponseModel getContactById(@RequestBody IdModel idModel){
-            Optional<ContactEntity> contact = contactService.getContactById(idModel);
-            if(contact.isPresent() && !contact.get().getDeleted()){
-                return new ResponseModel("ok", "success", contact.get());
-            } else {
-                return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);
-            }
+    @GetMapping("/contact")
+    public ResponseModel getContactById(@RequestBody IdModel idModel) {
+        Optional<ContactEntity> contact = contactService.getContactById(idModel);
+        if (contact.isPresent() && !contact.get().getDeleted()) {
+            return new ResponseModel("ok", "success", contact.get());
+        } else {
+            return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);
+        }
 
     }
 
     @PutMapping("/update-contact")
-    public ResponseModel updateContact(@RequestBody ContactEntity contact){
+    public ResponseModel updateContact(@RequestBody ContactEntity contact) {
         return new ResponseModel("ok", "success", contactService.updateContact(contact));
     }
 
     @DeleteMapping("/deleteContactById")
-    public ResponseModel deleteContactById(@RequestBody IdModel idModel){
+    public ResponseModel deleteContactById(@RequestBody IdModel idModel) {
         Optional<ContactEntity> contact = contactService.getContactById(idModel);
-        if(contact.isPresent()){
+        if (contact.isPresent()) {
             Optional<ContactEntity> delete = contactService.getContactById(idModel);
             ContactEntity deleteContact = delete.get();
             deleteContact.setDeleted(true);

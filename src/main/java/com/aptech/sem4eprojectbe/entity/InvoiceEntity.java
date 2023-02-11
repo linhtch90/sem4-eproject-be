@@ -1,5 +1,8 @@
 package com.aptech.sem4eprojectbe.entity;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,21 +16,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="users")
-public class UserEntity {
+@Table(name="invoice")
+public class InvoiceEntity {
     @Id
     @GeneratedValue
     @UuidGenerator
     private String id;
     
-    private String firstname;
-    private String lastname;
-    private String address;
-    private String district;
-    private String city;
-    private String role;
-    private String phone;
-    private String email;
-    private String password;
+    private LocalDateTime createat;
+    private BigDecimal totalprice;
+    private String status;
+    private String userid;
     private Boolean deleted;
+    
 }

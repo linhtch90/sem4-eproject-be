@@ -3,7 +3,6 @@ package com.aptech.sem4eprojectbe.entity;
 import java.math.BigDecimal;
 
 import org.hibernate.annotations.UuidGenerator;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;

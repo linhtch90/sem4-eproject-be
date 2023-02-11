@@ -29,12 +29,12 @@ public class UserController {
         return new ResponseModel("ok", "success", userService.insertUser(user));
     }
 
-    @GetMapping("/getAllUsers")
+    @GetMapping("/users")
     public ResponseModel getAllUsers(){
         return new ResponseModel("ok", "success", userService.getAllUsers());
     }
 
-    @GetMapping("/getUserById")
+    @GetMapping("/user")
     public ResponseModel getUserById(@RequestBody IdModel idModel){
         Optional<UserEntity> user = userService.getUserById(idModel);
         if(user.isPresent() && !user.get().getDeleted()){
@@ -44,12 +44,12 @@ public class UserController {
         }
     }
 
-    @PutMapping("/updateUser")
+    @PutMapping("/update-user")
     public ResponseModel updateUser(@RequestBody UserEntity user){
         return new ResponseModel("ok", "success", userService.updateUser(user));
     }
 
-    @DeleteMapping("/deleteUser")
+    @DeleteMapping("/delete-user")
     public ResponseModel deleteUser(@RequestBody IdModel idModel){
         Optional<UserEntity> user = userService.getUserById(idModel);
         if(user.isPresent()){

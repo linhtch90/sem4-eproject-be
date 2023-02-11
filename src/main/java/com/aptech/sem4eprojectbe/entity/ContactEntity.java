@@ -2,7 +2,6 @@ package com.aptech.sem4eprojectbe.entity;
 
 import org.hibernate.annotations.UuidGenerator;
 
-import jakarta.annotation.Generated;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
