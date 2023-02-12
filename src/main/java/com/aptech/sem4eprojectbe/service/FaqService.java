@@ -26,13 +26,11 @@ public class FaqService {
 
     @Cacheable("faqs")
     public List<FaqEntity> getAllFaqs() {
-        System.out.println(">>> Call database all faqs");
         return faqRepository.findByDeletedIsFalse();
     }
 
     @Cacheable(value = "faq", key = "#idModel.getId()")
     public Optional<FaqEntity> getFaqById(IdModel idModel) {
-        System.out.println(">>> Call database faq id " + idModel.getId());
         return faqRepository.findById(idModel.getId());
     }
 

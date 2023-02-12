@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.EnableCaching;
 @SpringBootApplication
 @EnableCaching
 public class Sem4EprojectBeApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(Sem4EprojectBeApplication.class, args);
 	}
