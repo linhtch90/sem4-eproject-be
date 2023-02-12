@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import com.aptech.sem4eprojectbe.common.model.IdModel;
@@ -14,19 +18,28 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @CacheEvict(value = "products" , allEntries= true)
     public ProductEntity insertProduct(ProductEntity product){
+        System.out.println("Caching insert product ( delete cache : products)");
         return productRepository.save(product);
     }
 
+    @Cacheable(value="products")
     public List<ProductEntity> getAllProduct(){
+        System.out.println("Caching get  products ( Create cache : product)");
         return productRepository.findByDeletedIsFalse();
     }
     
+    @Cacheable(value="product" , key = "#idModel.getId()")
     public Optional<ProductEntity> getProductById(IdModel  idModel){
+        System.out.println("Caching get product  ( Create cache : product and create key product saved)");
         return productRepository.findById(idModel.getId());
     }
 
+    @Caching(evict =  {@CacheEvict (value = "products" , allEntries = true )} , put = {@CachePut (value = "product" , key = "#product.getId()" )} )
     public ProductEntity updateProductEntity(ProductEntity product){
+        System.out.println("Caching update product ( delete cache : products , and put and update key exits cache product)");
+
         return productRepository.findById(product.getId())
         .map(productItem -> {
             productItem.setName(product.getName());

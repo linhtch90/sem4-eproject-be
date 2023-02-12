@@ -7,6 +7,10 @@ import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 
@@ -20,20 +24,28 @@ public class InvoiceService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @CacheEvict(value = "invoices", allEntries = true)
     public InvoiceEntity insertInvoice(InvoiceEntity invoice){
+        System.out.println("Caching insert invoice ( delete cache : invoices)");
         invoice.setCreateat(LocalDateTime.now());
         return invoiceRepository.save(invoice);
     }
 
+    @Cacheable(value = "invoices")
     public List<InvoiceEntity> getAllInvoice(){
+        System.out.println("Caching get invoices ( create cache : invoices)");
         return invoiceRepository.findByDeletedIsFalse();
     }
 
+    @Cacheable(value = "invoice", key = "#idModel.getId()")
     public Optional<InvoiceEntity> getInvoiceById(IdModel idModel){
+        System.out.println("Caching get invoice ( create cache : invoice and id saved)");
         return invoiceRepository.findById(idModel.getId());
     }
 
+    @Caching(evict = {@CacheEvict (value = "invoices")}, put = {@CachePut (value = "invoice", key = "#invoice.getId()")})
     public InvoiceEntity deleteInvoice(InvoiceEntity invoice){
+        System.out.println("Caching update invoice ( delete cache : products and put and update cache invoice with id)");
         return invoiceRepository.findById(invoice.getId())
         .map(invoiceItem -> {
             invoiceItem.setDeleted(invoice.getDeleted());
