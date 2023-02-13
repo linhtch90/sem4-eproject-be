@@ -50,12 +50,11 @@ public class ContactController {
         return new ResponseModel("ok", "success", contactService.updateContact(contact));
     }
 
-    @DeleteMapping("/deleteContactById")
+    @DeleteMapping("/delete-contact")
     public ResponseModel deleteContactById(@RequestBody IdModel idModel) {
         Optional<ContactEntity> contact = contactService.getContactById(idModel);
         if (contact.isPresent()) {
-            Optional<ContactEntity> delete = contactService.getContactById(idModel);
-            ContactEntity deleteContact = delete.get();
+            ContactEntity deleteContact = contact.get();
             deleteContact.setDeleted(true);
             contactService.updateContact(deleteContact);
             return new ResponseModel("ok ", "success", null);

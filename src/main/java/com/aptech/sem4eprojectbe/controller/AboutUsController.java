@@ -19,7 +19,7 @@ public class AboutUsController {
     @Autowired
     private AboutUsService aboutUsService;
 
-    @PostMapping("/insert-aboutus")
+    @PostMapping("/insert-about-us")
     public ResponseModel insertAboutUs(@RequestBody AboutUsEntity aboutUs){
         return new ResponseModel("ok", "success", aboutUsService.insertAboutUs(aboutUs));
     }
@@ -29,7 +29,7 @@ public class AboutUsController {
         return new ResponseModel("ok", "success", aboutUsService.getAllAboutUs());
     }
 
-    @GetMapping("/aboutus")
+    @GetMapping("/about-us")
     public ResponseModel getAboutUsById(@RequestBody IdModel idModel){
         Optional<AboutUsEntity> aboutUs = aboutUsService.getAboutUsById(idModel);
         if(aboutUs.isPresent() && !aboutUs.get().getDeleted()){
@@ -39,17 +39,17 @@ public class AboutUsController {
         }
     }
 
-    @PutMapping("/update-aboutUs")
+    @PutMapping("/update-about-us")
     public ResponseModel updateAboutUs(@RequestBody AboutUsEntity aboutUs){
         return new ResponseModel("ok", "success", aboutUsService.updateAboutUs(aboutUs));
     }
 
-    @DeleteMapping("/delete-aboutById")
+    @DeleteMapping("/delete-about-us")
     public ResponseModel deleteAboutUsById(@RequestBody IdModel idModel){
         Optional<AboutUsEntity> aboutUs = aboutUsService.getAboutUsById(idModel);
         if(aboutUs.isPresent()){
-            Optional<AboutUsEntity> aboutUsEntity = aboutUsService.getAboutUsById(idModel);
-            AboutUsEntity deleteAboutUs = aboutUsEntity.get();
+            AboutUsEntity deleteAboutUs = aboutUs.get();
+            deleteAboutUs.setDeleted(true);
             aboutUsService.updateAboutUs(deleteAboutUs);
             return new ResponseModel("ok", "success", null);
         } else {
