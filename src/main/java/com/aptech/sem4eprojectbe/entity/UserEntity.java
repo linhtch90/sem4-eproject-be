@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="users")
+@Table(name = "usertbl")
 public class UserEntity {
     @Id
     @GeneratedValue
     @UuidGenerator
     private String id;
-    
+
     private String firstname;
     private String lastname;
     private String address;
