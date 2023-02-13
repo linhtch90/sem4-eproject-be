@@ -23,20 +23,20 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/insert-category")
-    public ResponseModel insertCategory(@RequestBody CategoryEntity category){
-          return new ResponseModel("ok", "success", categoryService.insertCategory(category));
+    public ResponseModel insertCategory(@RequestBody CategoryEntity category) {
+        return new ResponseModel("ok", "success", categoryService.insertCategory(category));
 
     }
 
     @GetMapping("/categories")
-    public ResponseModel getAllCategory(){
+    public ResponseModel getAllCategory() {
         return new ResponseModel("ok ", "success", categoryService.getAllCategory());
     }
 
     @GetMapping("/category")
-    public ResponseModel getCategoryById(@RequestBody IdModel idModel){
+    public ResponseModel getCategoryById(@RequestBody IdModel idModel) {
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
-        if(cate.isPresent() && !cate.get().getDeleted()){
+        if (cate.isPresent() && !cate.get().getDeleted()) {
             return new ResponseModel("ok", "success", cate.get());
         } else {
             return new ResponseModel("fail", "Can not find id " + idModel.getId(), null);
@@ -44,17 +44,17 @@ public class CategoryController {
     }
 
     @PutMapping("/update-category")
-    public ResponseModel updateCategory(@RequestBody CategoryEntity category){
+    public ResponseModel updateCategory(@RequestBody CategoryEntity category) {
         return new ResponseModel("ok", "success", categoryService.updateCategory(category));
-    }    
+    }
 
     @DeleteMapping("/delete-category")
-    public ResponseModel deleteCategory(@RequestBody IdModel idModel){
-        Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
-        if(cate.isPresent()){
-            Optional<CategoryEntity> cateEntity = categoryService.getCategoryById(idModel);
-            CategoryEntity deleteCate = cateEntity.get();
-            categoryService.updateCategory(deleteCate);
+    public ResponseModel deleteCategory(@RequestBody IdModel idModel) {
+        Optional<CategoryEntity> category = categoryService.getCategoryById(idModel);
+        if (category.isPresent()) {
+            CategoryEntity deletedCategory = category.get();
+            deletedCategory.setDeleted(true);
+            categoryService.updateCategory(deletedCategory);
             return new ResponseModel("ok", "success", null);
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
