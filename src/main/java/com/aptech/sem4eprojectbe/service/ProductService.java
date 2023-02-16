@@ -45,8 +45,10 @@ public class ProductService {
 
         return productRepository.findById(product.getId())
                 .map(productItem -> {
+                    if (!product.getImage().isEmpty()) {
+                        productItem.setImage(product.getImage());
+                    }
                     productItem.setName(product.getName());
-                    productItem.setImage(product.getImage());
                     productItem.setPrice(product.getPrice());
                     productItem.setDescription(product.getDescription());
                     productItem.setCategoryid(product.getCategoryid());

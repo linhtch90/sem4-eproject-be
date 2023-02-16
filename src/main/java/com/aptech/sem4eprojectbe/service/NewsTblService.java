@@ -43,7 +43,9 @@ public class NewsTblService {
     public NewsTblEntity updateNew(NewsTblEntity news) {
         return newsTblRepository.findById(news.getId())
                 .map(newItem -> {
-                    newItem.setImage(news.getImage());
+                    if (!news.getImage().isEmpty()) {
+                        newItem.setImage(news.getImage());
+                    }
                     newItem.setContent(news.getContent());
                     newItem.setTitle(news.getTitle());
                     newItem.setDeleted(news.getDeleted());
