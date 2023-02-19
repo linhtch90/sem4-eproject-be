@@ -16,26 +16,25 @@ import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.InvoiceItemEntity;
 import com.aptech.sem4eprojectbe.service.InvoiceItemService;
 
-
 @RestController
 @RequestMapping("/api/v1")
 public class InvoiceItemController {
-    
+
     @Autowired
     private InvoiceItemService invoiceItemService;
 
-    @PostMapping("/insert-invoiceItem")
-    public ResponseModel insertInvoiceItem(@RequestBody InvoiceItemEntity invoiceItem){
+    @PostMapping("/insert-invoice-item")
+    public ResponseModel insertInvoiceItem(@RequestBody InvoiceItemEntity invoiceItem) {
         return new ResponseModel("ok", "success", invoiceItemService.insertInvoiceItem(invoiceItem));
     }
 
     @GetMapping("/invoice-items")
-    public ResponseModel getAllInvoiceItem(){
+    public ResponseModel getAllInvoiceItem() {
         return new ResponseModel("ok", "success", invoiceItemService.getAllInvoiceItem());
     }
 
     @GetMapping("/invoice-item")
-    public ResponseModel getInvoiceItemById(@RequestBody IdModel idModel){
+    public ResponseModel getInvoiceItemById(@RequestBody IdModel idModel) {
         Optional<InvoiceItemEntity> invoiceItem = invoiceItemService.getInvoiceItemById(idModel);
         if (invoiceItem.isPresent() && !invoiceItem.get().getDeleted()) {
             return new ResponseModel("ok", "success", invoiceItem.get());
@@ -45,14 +44,14 @@ public class InvoiceItemController {
     }
 
     @PutMapping("/update-invoice-item")
-    public ResponseModel updateInvoiceItem(@RequestBody InvoiceItemEntity invoiceItem){
+    public ResponseModel updateInvoiceItem(@RequestBody InvoiceItemEntity invoiceItem) {
         return new ResponseModel("ok", null, invoiceItemService.updateInvoiceItem(invoiceItem));
     }
 
     @DeleteMapping("/delete-invoice-item")
-    public ResponseModel deleteInvoiceItem(@RequestBody IdModel idModel){
+    public ResponseModel deleteInvoiceItem(@RequestBody IdModel idModel) {
         Optional<InvoiceItemEntity> invoiceItem = invoiceItemService.getInvoiceItemById(idModel);
-        if(invoiceItem.isPresent()) {
+        if (invoiceItem.isPresent()) {
             InvoiceItemEntity invoiceItemDelete = invoiceItem.get();
             invoiceItemDelete.setDeleted(true);
             invoiceItemService.updateInvoiceItem(invoiceItemDelete);
@@ -62,4 +61,5 @@ public class InvoiceItemController {
             return new ResponseModel("fail", "Can not find id:" + idModel.getId(), null);
         }
     }
+
 }
