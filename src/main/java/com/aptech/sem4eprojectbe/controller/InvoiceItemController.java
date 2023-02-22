@@ -1,5 +1,6 @@
 package com.aptech.sem4eprojectbe.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,23 @@ public class InvoiceItemController {
         return new ResponseModel("ok", "success", invoiceItemService.getAllInvoiceItem());
     }
 
-    @GetMapping("/invoice-item")
+    @PostMapping("/invoice-item")
     public ResponseModel getInvoiceItemById(@RequestBody IdModel idModel) {
         Optional<InvoiceItemEntity> invoiceItem = invoiceItemService.getInvoiceItemById(idModel);
         if (invoiceItem.isPresent() && !invoiceItem.get().getDeleted()) {
             return new ResponseModel("ok", "success", invoiceItem.get());
         } else {
             return new ResponseModel("fail", "Cannot find faq id: " + idModel.getId(), null);
+        }
+    }
+
+    @PostMapping("/invoice-items/by-invoice-id")
+    public ResponseModel getInvoiceItemByInvoiceId(@RequestBody IdModel idModel) {
+        Optional<List<InvoiceItemEntity>> invoiceItems = invoiceItemService.getByInvoiceId(idModel);
+        if (invoiceItems.isPresent()) {
+            return new ResponseModel("ok", "success", invoiceItems.get());
+        } else {
+            return new ResponseModel("fail", "Cannot find invoice items of invoice id: " + idModel.getId(), null);
         }
     }
 

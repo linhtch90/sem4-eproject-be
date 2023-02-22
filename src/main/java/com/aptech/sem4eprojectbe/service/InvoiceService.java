@@ -40,7 +40,7 @@ public class InvoiceService {
         return invoiceRepository.findById(idModel.getId());
     }
 
-    @Caching(evict = { @CacheEvict(value = "invoices") }, put = {
+    @Caching(evict = { @CacheEvict(value = "invoices", allEntries = true) }, put = {
             @CachePut(value = "invoice", key = "#invoice.getId()") })
     public InvoiceEntity deleteInvoice(InvoiceEntity invoice) {
         System.out
@@ -48,6 +48,24 @@ public class InvoiceService {
         return invoiceRepository.findById(invoice.getId())
                 .map(invoiceItem -> {
                     invoiceItem.setDeleted(invoice.getDeleted());
+                    return invoiceRepository.save(invoiceItem);
+                })
+                .orElseGet(() -> {
+                    return null;
+                });
+    }
+
+    @Caching(evict = { @CacheEvict(value = "invoices", allEntries = true) }, put = {
+            @CachePut(value = "invoice", key = "#invoice.getId()") })
+    public InvoiceEntity updateInvoiceItem(InvoiceEntity invoice) {
+        return invoiceRepository.findById(invoice.getId())
+                .map(invoiceItem -> {
+                    invoiceItem.setCreateat(invoice.getCreateat());
+                    invoiceItem.setDeleted(invoice.getDeleted());
+                    invoiceItem.setStatus(invoice.getStatus());
+                    invoiceItem.setTotalprice(invoice.getTotalprice());
+                    invoiceItem.setUserid(invoice.getUserid());
+
                     return invoiceRepository.save(invoiceItem);
                 })
                 .orElseGet(() -> {
