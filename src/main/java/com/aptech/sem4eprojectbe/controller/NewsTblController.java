@@ -32,7 +32,7 @@ public class NewsTblController {
         return new ResponseModel("ok", "success", newsTblService.getAllNews());
     }
 
-    @GetMapping("/news")
+    @PostMapping("/news")
     public ResponseModel getNewById(@RequestBody IdModel idModel) {
         Optional<NewsTblEntity> news = newsTblService.getNewById(idModel);
         if (news.isPresent() && !news.get().getDeleted()) {
