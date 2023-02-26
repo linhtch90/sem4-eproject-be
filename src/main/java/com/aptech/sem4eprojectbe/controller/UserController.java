@@ -1,5 +1,5 @@
 package com.aptech.sem4eprojectbe.controller;
- 
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +15,11 @@ import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.UserEntity;
 import com.aptech.sem4eprojectbe.service.UserService;
- 
 
 @RestController
 @RequestMapping("/api/v1")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
 
@@ -30,14 +29,14 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseModel getAllUsers(){
+    public ResponseModel getAllUsers() {
         return new ResponseModel("ok", "success", userService.getAllUsers());
     }
 
-    @GetMapping("/user")
-    public ResponseModel getUserById(@RequestBody IdModel idModel){
+    @PostMapping("/user")
+    public ResponseModel getUserById(@RequestBody IdModel idModel) {
         Optional<UserEntity> user = userService.getUserById(idModel);
-        if(user.isPresent() && !user.get().getDeleted()){
+        if (user.isPresent() && !user.get().getDeleted()) {
             return new ResponseModel("ok", "success", user.get());
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
@@ -45,20 +44,20 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseModel updateUser(@RequestBody UserEntity user){
+    public ResponseModel updateUser(@RequestBody UserEntity user) {
         return new ResponseModel("ok", "success", userService.updateUser(user));
     }
 
     @DeleteMapping("/delete-user")
-    public ResponseModel deleteUser(@RequestBody IdModel idModel){
+    public ResponseModel deleteUser(@RequestBody IdModel idModel) {
         Optional<UserEntity> user = userService.getUserById(idModel);
-        if(user.isPresent()){
+        if (user.isPresent()) {
             UserEntity deleteUser = user.get();
             deleteUser.setDeleted(true);
             userService.updateUser(deleteUser);
             return new ResponseModel("ok", "success", null);
         } else {
-            return new ResponseModel("fail", "Can not find id : "+ idModel.getId(), null);
+            return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
         }
     }
 }

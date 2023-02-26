@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.aptech.sem4eprojectbe.common.model.IdModel;
@@ -19,8 +20,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptEncoder;
+
     @CacheEvict(value = "users", allEntries = true)
     public UserEntity insertUser(UserEntity user) {
+        user.setPassword(bCryptEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
