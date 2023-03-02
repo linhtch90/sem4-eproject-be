@@ -33,7 +33,7 @@ public class CategoryController {
         return new ResponseModel("ok ", "success", categoryService.getAllCategory());
     }
 
-    @GetMapping("/category")
+    @PostMapping("/category")
     public ResponseModel getCategoryById(@RequestBody IdModel idModel) {
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
         if (cate.isPresent() && !cate.get().getDeleted()) {

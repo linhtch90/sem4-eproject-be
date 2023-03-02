@@ -19,24 +19,24 @@ import com.aptech.sem4eprojectbe.service.ProductService;
 @RestController
 @RequestMapping("/api/v1")
 public class ProductController {
-    
+
     @Autowired
     private ProductService productService;
 
     @PostMapping("/insert-product")
-    public ResponseModel insertProduct(@RequestBody ProductEntity product){
+    public ResponseModel insertProduct(@RequestBody ProductEntity product) {
         return new ResponseModel("ok", "success", productService.insertProduct(product));
     }
 
     @GetMapping("/products")
-    public ResponseModel getAllProducts(){
+    public ResponseModel getAllProducts() {
         return new ResponseModel("ok", "success", productService.getAllProduct());
     }
 
-    @GetMapping("/product")
-    public ResponseModel getProductById(@RequestBody IdModel idModel){
+    @PostMapping("/product")
+    public ResponseModel getProductById(@RequestBody IdModel idModel) {
         Optional<ProductEntity> product = productService.getProductById(idModel);
-        if(product.isPresent() && !product.get().getDeleted()){
+        if (product.isPresent() && !product.get().getDeleted()) {
             return new ResponseModel("ok", "success", product);
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
@@ -44,14 +44,14 @@ public class ProductController {
     }
 
     @PutMapping("/update-product")
-    public ResponseModel updateProduct(@RequestBody ProductEntity product){
+    public ResponseModel updateProduct(@RequestBody ProductEntity product) {
         return new ResponseModel("ok", "success", productService.updateProductEntity(product));
     }
 
     @DeleteMapping("/delete-product")
-    public ResponseModel deleteProduct(@RequestBody IdModel idModel){
+    public ResponseModel deleteProduct(@RequestBody IdModel idModel) {
         Optional<ProductEntity> product = productService.getProductById(idModel);
-        if(product.isPresent()){
+        if (product.isPresent()) {
             ProductEntity updateProduct = product.get();
             updateProduct.setDeleted(true);
             productService.updateProductEntity(updateProduct);
