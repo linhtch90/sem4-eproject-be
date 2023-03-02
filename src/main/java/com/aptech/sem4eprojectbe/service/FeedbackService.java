@@ -62,4 +62,8 @@ public class FeedbackService {
                 });
     }
 
+    public Optional<List<FeedbackEntity>> findByProductId(IdModel id) {
+        return feedbackRepository.findByProductId(id.getId());
+    }
+
 }
