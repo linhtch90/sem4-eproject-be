@@ -57,7 +57,7 @@ public class InvoiceController {
         }
     }
 
-    @GetMapping("/invoice-by-user-id")
+    @PostMapping("/invoice-by-user-id")
     public ResponseModel getInvoiceByUserid(@RequestBody IdModel idModel) {
         List<InvoiceEntity> invoices = invoiceService.getInvoiceByUserid(idModel).get();
         return new ResponseModel("ok", "success", invoices);
