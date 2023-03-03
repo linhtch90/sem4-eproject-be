@@ -54,7 +54,7 @@ public class UserService {
                     userItem.setRole(user.getRole());
                     userItem.setPhone(user.getPhone());
                     userItem.setEmail(user.getEmail());
-                    userItem.setPassword(user.getPassword());
+                    userItem.setPassword(bCryptEncoder.encode(user.getPassword()));
                     userItem.setDeleted(user.getDeleted());
                     return userRepository.save(userItem);
                 })
@@ -68,7 +68,39 @@ public class UserService {
                     newUser.setRole(user.getRole());
                     newUser.setPhone(user.getPhone());
                     newUser.setEmail(user.getEmail());
-                    newUser.setPassword(user.getPassword());
+                    newUser.setPassword(bCryptEncoder.encode(user.getPassword()));
+                    newUser.setDeleted(false);
+                    return userRepository.save(newUser);
+                });
+    }
+
+    @Caching(evict = { @CacheEvict(value = "users", allEntries = true) }, put = {
+            @CachePut(value = "user", key = "#user.getId()") })
+    public UserEntity updateUserWithoutPassword(UserEntity user) {
+        return userRepository.findById(user.getId())
+                .map(userItem -> {
+                    userItem.setFirstname(user.getFirstname());
+                    userItem.setLastname(user.getLastname());
+                    userItem.setAddress(user.getAddress());
+                    userItem.setDistrict(user.getDistrict());
+                    userItem.setCity(user.getCity());
+                    userItem.setRole(user.getRole());
+                    userItem.setPhone(user.getPhone());
+                    userItem.setEmail(user.getEmail());
+                    userItem.setDeleted(user.getDeleted());
+                    return userRepository.save(userItem);
+                })
+                .orElseGet(() -> {
+                    UserEntity newUser = new UserEntity();
+                    newUser.setFirstname(user.getFirstname());
+                    newUser.setLastname(user.getLastname());
+                    newUser.setAddress(user.getAddress());
+                    newUser.setDistrict(user.getDistrict());
+                    newUser.setCity(user.getCity());
+                    newUser.setRole(user.getRole());
+                    newUser.setPhone(user.getPhone());
+                    newUser.setEmail(user.getEmail());
+                    newUser.setPassword(bCryptEncoder.encode(user.getPassword()));
                     newUser.setDeleted(false);
                     return userRepository.save(newUser);
                 });

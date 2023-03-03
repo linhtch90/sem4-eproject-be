@@ -48,6 +48,11 @@ public class UserController {
         return new ResponseModel("ok", "success", userService.updateUser(user));
     }
 
+    @PutMapping("/update-user-without-password")
+    public ResponseModel updateUserWithoutPassword(@RequestBody UserEntity user) {
+        return new ResponseModel("ok", "success", userService.updateUserWithoutPassword(user));
+    }
+
     @DeleteMapping("/delete-user")
     public ResponseModel deleteUser(@RequestBody IdModel idModel) {
         Optional<UserEntity> user = userService.getUserById(idModel);
