@@ -1,5 +1,6 @@
 package com.aptech.sem4eprojectbe.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aptech.sem4eprojectbe.common.model.IdModel;
@@ -59,6 +61,26 @@ public class ProductController {
         } else {
             return new ResponseModel("fail", "Can not find id :" + idModel.getId(), null);
         }
+    }
+
+
+
+    @GetMapping("/alcohol")
+    public ResponseModel getAllByLeverAlcohol(@RequestParam("alcoholNumber") String lever) {
+        if(lever.equals("all")){
+            return new ResponseModel("ok", "success", productService.getAllProduct());
+        }
+
+        return new ResponseModel("ok", "success", productService.getAllByLeverAlcohol(lever));
+    }
+
+    @PostMapping("/product-by-cateId")
+    public ResponseModel getProductByCategoryId(@RequestBody IdModel idModel){
+       Optional<List<ProductEntity>> product = productService.getAllByCategoryId(idModel);
+       if(product.isPresent()){
+           return new ResponseModel("ok", "success", productService.getAllByCategoryId(idModel));
+       }
+       return null;
     }
 
 }

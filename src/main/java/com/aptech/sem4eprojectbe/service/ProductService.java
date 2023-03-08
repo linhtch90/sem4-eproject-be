@@ -9,7 +9,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
-
 import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.entity.ProductEntity;
 import com.aptech.sem4eprojectbe.repository.ProductRepository;
@@ -68,4 +67,13 @@ public class ProductService {
                     return productRepository.save(newProduct);
                 });
     }
+
+    public List<ProductEntity> getAllByLeverAlcohol(String lever) {
+        return productRepository.findByAlcoholLessThanEqual(lever);
+    }
+
+    public Optional<List<ProductEntity>> getAllByCategoryId(IdModel idModel){
+        return productRepository.findByCategoryid(idModel.getId());
+    }
+
 }
