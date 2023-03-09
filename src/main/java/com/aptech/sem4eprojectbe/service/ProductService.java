@@ -76,4 +76,9 @@ public class ProductService {
         return productRepository.findByCategoryid(idModel.getId());
     }
 
+
+    public Optional<List<ProductEntity>> findByProductName(String productName) {
+        String name = "%" + productName + "%";
+        return productRepository.findByNameLikeIgnoreCase(name);
+    }
 }

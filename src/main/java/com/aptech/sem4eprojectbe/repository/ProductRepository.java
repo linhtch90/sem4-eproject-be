@@ -15,4 +15,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, String> 
 
     Optional<List<ProductEntity>> findByCategoryid(String id);
 
+
+    public Optional<List<ProductEntity>> findByNameLikeIgnoreCase(String name);
 }

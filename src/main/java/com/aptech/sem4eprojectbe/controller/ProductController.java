@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.ProductEntity;
+import com.aptech.sem4eprojectbe.entity.ProductNameEntity;
 import com.aptech.sem4eprojectbe.service.ProductService;
 
 @RestController
@@ -42,6 +43,16 @@ public class ProductController {
             return new ResponseModel("ok", "success", product);
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
+        }
+    }
+
+    @PostMapping("/search-by-name")
+    public ResponseModel getProductByName(@RequestBody ProductNameEntity name) {
+        Optional<List<ProductEntity>> products = productService.findByProductName(name.getName());
+        if (products.isPresent()) {
+            return new ResponseModel("ok", "success", products);
+        } else {
+            return new ResponseModel("fail", "Can not find product by name: " + name.getName(), null);
         }
     }
 
