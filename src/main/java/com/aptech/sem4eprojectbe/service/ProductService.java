@@ -3,12 +3,16 @@ package com.aptech.sem4eprojectbe.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.html.Option;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+
+import com.aptech.sem4eprojectbe.common.model.FilterCombine;
 import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.entity.ProductEntity;
 import com.aptech.sem4eprojectbe.repository.ProductRepository;
@@ -80,5 +84,9 @@ public class ProductService {
     public Optional<List<ProductEntity>> findByProductName(String productName) {
         String name = "%" + productName + "%";
         return productRepository.findByNameLikeIgnoreCase(name);
+    }
+
+    public  List<ProductEntity>  findByAlcoholAndCategoryId(FilterCombine alcohol){
+        return productRepository.findByAlcoholLessThanEqualAndCategoryid(alcohol.getAlcohol(), alcohol.getCateid());
     }
 }

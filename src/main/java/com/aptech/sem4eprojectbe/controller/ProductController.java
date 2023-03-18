@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aptech.sem4eprojectbe.common.model.FilterCombine;
 import com.aptech.sem4eprojectbe.common.model.IdModel;
 import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.ProductEntity;
@@ -87,11 +88,24 @@ public class ProductController {
 
     @PostMapping("/product-by-cateId")
     public ResponseModel getProductByCategoryId(@RequestBody IdModel idModel){
-       Optional<List<ProductEntity>> product = productService.getAllByCategoryId(idModel);
-       if(product.isPresent()){
-           return new ResponseModel("ok", "success", productService.getAllByCategoryId(idModel));
-       }
-       return null;
+        if(idModel.getId().equals("all")) {
+            return new ResponseModel("ok", "success", productService.getAllProduct());
+        }
+        Optional<List<ProductEntity>> product = productService.getAllByCategoryId(idModel);
+        if(product.isPresent()){
+            return new ResponseModel("ok", "success", productService.getAllByCategoryId(idModel));
+        }
+        return null;
     }
+
+    @PostMapping("/filter-combine")
+    public ResponseModel getAllAlcoholAndCategoryId(@RequestBody FilterCombine filter ){
+         List<ProductEntity>  products = productService.findByAlcoholAndCategoryId(filter);
+       
+            // System.out.println("products " + products);
+            return new ResponseModel("ok", "success", products);
+        
+    }
+
 
 }

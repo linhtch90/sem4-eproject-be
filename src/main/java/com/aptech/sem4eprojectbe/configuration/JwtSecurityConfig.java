@@ -38,7 +38,7 @@ public class JwtSecurityConfig {
                 .requestMatchers("/api/v1/authenticate", "/api/v1/contacts", "/api/v1/contact", "/api/v1/all-news",
                         "/api/v1/news", "/api/v1/products", "/api/v1/product", "/api/v1/categories", "/api/v1/category",
                         "/api/v1/feedbacks", "/api/v1/feedback", "/api/v1/all-about-us", "/api/v1/about-us",
-                        "/api/v1/faqs", "/api/v1/faq", "/api/v1/feedbacks/by-product-id", "/api/v1/insert-user", "/api/v1/alcohol**","/api/v1/product-by-cateId", "/api/v1/search-by-name")
+                        "/api/v1/faqs", "/api/v1/faq", "/api/v1/feedbacks/by-product-id", "/api/v1/insert-user", "/api/v1/alcohol**","/api/v1/product-by-cateId", "/api/v1/search-by-name", "/api/v1/filter-combine")
                 .permitAll()
                 .requestMatchers("/api/v1/delete-feedback", "/api/v1/delete-invoice", "/api/v1/delete-invoice-items",
                         "/api/v1/delete-contact", "/api/v1/delete-about-us", "/api/v1/delete-category",

@@ -8,13 +8,16 @@ import org.springframework.stereotype.Repository;
 
 import com.aptech.sem4eprojectbe.entity.ProductEntity;
 
+ 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, String> {
     public List<ProductEntity> findByDeletedIsFalse();
-    List<ProductEntity> findByAlcoholLessThanEqual(String alcoholLevel);
 
-    Optional<List<ProductEntity>> findByCategoryid(String id);
+    public List<ProductEntity> findByAlcoholLessThanEqual(String alcoholLevel);
 
+    public Optional<List<ProductEntity>> findByCategoryid(String id);
 
     public Optional<List<ProductEntity>> findByNameLikeIgnoreCase(String name);
+ 
+    public  List<ProductEntity> findByAlcoholLessThanEqualAndCategoryid(String alcohol, String cateId);
 }
