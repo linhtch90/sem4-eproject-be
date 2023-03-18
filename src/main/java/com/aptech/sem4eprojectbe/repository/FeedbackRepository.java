@@ -12,5 +12,5 @@ import com.aptech.sem4eprojectbe.entity.FeedbackEntity;
 public interface FeedbackRepository extends JpaRepository<FeedbackEntity, String> {
     public List<FeedbackEntity> findByDeletedIsFalse();
 
-    public Optional<List<FeedbackEntity>> findByProductId(String productId);
+    public Optional<List<FeedbackEntity>> findByProductIdAndDeletedIsFalse(String productId);
 }
