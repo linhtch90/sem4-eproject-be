@@ -3,7 +3,9 @@ package com.aptech.sem4eprojectbe.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,8 @@ import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.FaqEntity;
 import com.aptech.sem4eprojectbe.service.FaqService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class FaqController {
@@ -23,7 +27,7 @@ public class FaqController {
     private FaqService faqService;
 
     @PostMapping("/insert-faq")
-    public ResponseModel insertFaq(@RequestBody FaqEntity faq) {
+    public ResponseModel insertFaq(@Valid @RequestBody FaqEntity faq) {
         return new ResponseModel("ok", "success", faqService.insertFaq(faq));
     }
 
@@ -33,7 +37,7 @@ public class FaqController {
     }
 
     @GetMapping("/faq")
-    public ResponseModel getFaqById(@RequestBody IdModel idModel) {
+    public ResponseModel getFaqById(@Valid @RequestBody IdModel idModel) {
         Optional<FaqEntity> faq = faqService.getFaqById(idModel);
         if (faq.isPresent() && !faq.get().getDeleted()) {
             return new ResponseModel("ok", "success", faq.get());
@@ -43,12 +47,12 @@ public class FaqController {
     }
 
     @PutMapping("/update-faq")
-    public ResponseModel updateFaq(@RequestBody FaqEntity faq) {
+    public ResponseModel updateFaq(@Valid @RequestBody FaqEntity faq) {
         return new ResponseModel("ok", "success", faqService.updateFaq(faq));
     }
 
     @DeleteMapping("/delete-faq")
-    public ResponseModel removeFaqById(@RequestBody IdModel idModel) {
+    public ResponseModel removeFaqById(@Valid @RequestBody IdModel idModel) {
         Optional<FaqEntity> faq = faqService.getFaqById(idModel);
         if (faq.isPresent()) {
             FaqEntity deletedFaq = faq.get();
@@ -58,5 +62,10 @@ public class FaqController {
         } else {
             return new ResponseModel("fail", "Cannot find faq id: " + idModel.getId(), null);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseModel handleValidationException(MethodArgumentNotValidException exception) {
+        return new ResponseModel("fail", "Validation Error", exception.getMessage());
     }
 }
