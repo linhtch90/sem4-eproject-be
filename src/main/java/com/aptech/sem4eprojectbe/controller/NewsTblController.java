@@ -3,7 +3,9 @@ package com.aptech.sem4eprojectbe.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,8 @@ import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.NewsTblEntity;
 import com.aptech.sem4eprojectbe.service.NewsTblService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class NewsTblController {
@@ -23,7 +27,7 @@ public class NewsTblController {
     private NewsTblService newsTblService;
 
     @PostMapping("/insert-news")
-    public ResponseModel insertNews(@RequestBody NewsTblEntity news) {
+    public ResponseModel insertNews(@Valid @RequestBody NewsTblEntity news) {
         return new ResponseModel("ok", "success", newsTblService.insertNew(news));
     }
 
@@ -33,7 +37,7 @@ public class NewsTblController {
     }
 
     @PostMapping("/news")
-    public ResponseModel getNewById(@RequestBody IdModel idModel) {
+    public ResponseModel getNewById(@Valid @RequestBody IdModel idModel) {
         Optional<NewsTblEntity> news = newsTblService.getNewById(idModel);
         if (news.isPresent() && !news.get().getDeleted()) {
             return new ResponseModel("ok", "success", news.get());
@@ -43,12 +47,12 @@ public class NewsTblController {
     }
 
     @PutMapping("/update-news")
-    public ResponseModel updateNew(@RequestBody NewsTblEntity news) {
+    public ResponseModel updateNew(@Valid @RequestBody NewsTblEntity news) {
         return new ResponseModel("ok", "success", newsTblService.updateNew(news));
     }
 
     @DeleteMapping("/delete-news")
-    public ResponseModel removeNewById(@RequestBody IdModel idModel) {
+    public ResponseModel removeNewById(@Valid @RequestBody IdModel idModel) {
         Optional<NewsTblEntity> news = newsTblService.getNewById(idModel);
         if (news.isPresent()) {
             NewsTblEntity deletedNew = news.get();
@@ -58,5 +62,10 @@ public class NewsTblController {
         } else {
             return new ResponseModel("fail", "Cannot find new id: " + idModel.getId(), null);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseModel handleValidationException(MethodArgumentNotValidException exception) {
+        return new ResponseModel("fail", "Validation Error", exception.getMessage());
     }
 }

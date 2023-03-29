@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,6 +20,7 @@ import com.aptech.sem4eprojectbe.entity.FeedbackEntity;
 import com.aptech.sem4eprojectbe.service.FeedbackService;
 import com.stripe.model.PaymentLink.CustomField.Dropdown.Option;
 
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1")
 public class FeedbackController {
@@ -25,7 +28,7 @@ public class FeedbackController {
     private FeedbackService feedbackService;
 
     @PostMapping("/insert-feedback")
-    public ResponseModel insertFeedback(@RequestBody FeedbackEntity feedback) {
+    public ResponseModel insertFeedback(@Valid   @RequestBody FeedbackEntity feedback) {
         return new ResponseModel("ok", "success", feedbackService.insertFeedback(feedback));
     }
 
@@ -35,7 +38,7 @@ public class FeedbackController {
     }
 
     @GetMapping("/feedback")
-    public ResponseModel getFeedbackById(@RequestBody IdModel idModel) {
+    public ResponseModel getFeedbackById(@Valid @RequestBody IdModel idModel) {
         Optional<FeedbackEntity> feedback = feedbackService.getFeedbackById(idModel);
         if (feedback.isPresent() && !feedback.get().getDeleted()) {
             return new ResponseModel("ok", "success", feedback.get());
@@ -45,12 +48,12 @@ public class FeedbackController {
     }
 
     @PutMapping("/update-feedback")
-    public ResponseModel updateFaq(@RequestBody FeedbackEntity feedback) {
+    public ResponseModel updateFaq(@Valid @RequestBody FeedbackEntity feedback) {
         return new ResponseModel("ok", "success", feedbackService.updateFeedback(feedback));
     }
 
     @DeleteMapping("/delete-feedback")
-    public ResponseModel removeFeedbackById(@RequestBody IdModel idModel) {
+    public ResponseModel removeFeedbackById(@Valid @RequestBody IdModel idModel) {
         Optional<FeedbackEntity> feedback = feedbackService.getFeedbackById(idModel);
         if (feedback.isPresent()) {
             FeedbackEntity deletedFeedback = feedback.get();
@@ -63,12 +66,17 @@ public class FeedbackController {
     }
 
     @PostMapping("/feedbacks/by-product-id")
-    public ResponseModel findByProductId(@RequestBody IdModel idModel) {
+    public ResponseModel findByProductId(@Valid @RequestBody IdModel idModel) {
         Optional<List<FeedbackEntity>> feedbacks = feedbackService.findByProductId(idModel);
         if (feedbacks.isPresent()) {
             return new ResponseModel("ok", "success", feedbacks);
         } else {
             return new ResponseModel("fail", "Cannot find feedbacks of product id: " + idModel.getId(), null);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseModel handleValidationException(MethodArgumentNotValidException exception) {
+        return new ResponseModel("fail", "Validation Error", exception.getMessage());
     }
 }

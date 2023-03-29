@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,19 +26,24 @@ public class FeedbackEntity {
     private String id;
 
     @Column(name = "userid")
+    @NotBlank
     private String userId;
-
+    @NotBlank
     private String content;
+    @NotNull
     private LocalDateTime createat;
 
     @Column(name = "productid")
+    @NotBlank
     private String productId;
 
     @Column(name = "firstname")
+    @NotBlank
     private String firstName;
 
     @Column(name = "lastname")
+    @NotBlank
     private String lastName;
-
+    @NotNull
     private Boolean deleted;
 }

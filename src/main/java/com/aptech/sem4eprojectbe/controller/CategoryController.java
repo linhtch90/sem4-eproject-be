@@ -3,7 +3,9 @@ package com.aptech.sem4eprojectbe.controller;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +18,8 @@ import com.aptech.sem4eprojectbe.common.model.ResponseModel;
 import com.aptech.sem4eprojectbe.entity.CategoryEntity;
 import com.aptech.sem4eprojectbe.service.CategoryService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class CategoryController {
@@ -23,7 +27,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @PostMapping("/insert-category")
-    public ResponseModel insertCategory(@RequestBody CategoryEntity category) {
+    public ResponseModel insertCategory(@Valid @RequestBody CategoryEntity category) {
         return new ResponseModel("ok", "success", categoryService.insertCategory(category));
 
     }
@@ -34,7 +38,7 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    public ResponseModel getCategoryById(@RequestBody IdModel idModel) {
+    public ResponseModel getCategoryById(@Valid @RequestBody IdModel idModel) {
         Optional<CategoryEntity> cate = categoryService.getCategoryById(idModel);
         if (cate.isPresent() && !cate.get().getDeleted()) {
             return new ResponseModel("ok", "success", cate.get());
@@ -44,12 +48,12 @@ public class CategoryController {
     }
 
     @PutMapping("/update-category")
-    public ResponseModel updateCategory(@RequestBody CategoryEntity category) {
+    public ResponseModel updateCategory(@Valid @RequestBody CategoryEntity category) {
         return new ResponseModel("ok", "success", categoryService.updateCategory(category));
     }
 
     @DeleteMapping("/delete-category")
-    public ResponseModel deleteCategory(@RequestBody IdModel idModel) {
+    public ResponseModel deleteCategory(@Valid @RequestBody IdModel idModel) {
         Optional<CategoryEntity> category = categoryService.getCategoryById(idModel);
         if (category.isPresent()) {
             CategoryEntity deletedCategory = category.get();
@@ -59,5 +63,10 @@ public class CategoryController {
         } else {
             return new ResponseModel("fail", "Can not find id : " + idModel.getId(), null);
         }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseModel handleValidationException(MethodArgumentNotValidException exception) {
+        return new ResponseModel("fail", "Validation Error", exception.getMessage());
     }
 }
