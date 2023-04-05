@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +22,8 @@ import com.aptech.sem4eprojectbe.entity.ProductEntity;
 import com.aptech.sem4eprojectbe.entity.ProductNameEntity;
 import com.aptech.sem4eprojectbe.service.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class ProductController {
@@ -28,7 +32,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping("/insert-product")
-    public ResponseModel insertProduct(@RequestBody ProductEntity product) {
+    public ResponseModel insertProduct(@Valid @RequestBody ProductEntity product) {
         return new ResponseModel("ok", "success", productService.insertProduct(product));
     }
 
@@ -38,7 +42,7 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public ResponseModel getProductById(@RequestBody IdModel idModel) {
+    public ResponseModel getProductById(@Valid @RequestBody IdModel idModel) {
         Optional<ProductEntity> product = productService.getProductById(idModel);
         if (product.isPresent() && !product.get().getDeleted()) {
             return new ResponseModel("ok", "success", product);
@@ -48,7 +52,7 @@ public class ProductController {
     }
 
     @PostMapping("/search-by-name")
-    public ResponseModel getProductByName(@RequestBody ProductNameEntity name) {
+    public ResponseModel getProductByName(@Valid @RequestBody ProductNameEntity name) {
         Optional<List<ProductEntity>> products = productService.findByProductName(name.getName());
         if (products.isPresent()) {
             return new ResponseModel("ok", "success", products);
@@ -58,12 +62,12 @@ public class ProductController {
     }
 
     @PutMapping("/update-product")
-    public ResponseModel updateProduct(@RequestBody ProductEntity product) {
+    public ResponseModel updateProduct(@Valid @RequestBody ProductEntity product) {
         return new ResponseModel("ok", "success", productService.updateProductEntity(product));
     }
 
     @DeleteMapping("/delete-product")
-    public ResponseModel deleteProduct(@RequestBody IdModel idModel) {
+    public ResponseModel deleteProduct(@Valid @RequestBody IdModel idModel) {
         Optional<ProductEntity> product = productService.getProductById(idModel);
         if (product.isPresent()) {
             ProductEntity updateProduct = product.get();
@@ -75,11 +79,9 @@ public class ProductController {
         }
     }
 
-
-
     @GetMapping("/alcohol")
-    public ResponseModel getAllByLeverAlcohol(@RequestParam("alcoholNumber") String lever) {
-        if(lever.equals("all")){
+    public ResponseModel getAllByLeverAlcohol(@Valid @RequestParam("alcoholNumber") String lever) {
+        if (lever.equals("all")) {
             return new ResponseModel("ok", "success", productService.getAllProduct());
         }
 
@@ -87,25 +89,29 @@ public class ProductController {
     }
 
     @PostMapping("/product-by-cateId")
-    public ResponseModel getProductByCategoryId(@RequestBody IdModel idModel){
-        if(idModel.getId().equals("all")) {
+    public ResponseModel getProductByCategoryId(@Valid @RequestBody IdModel idModel) {
+        if (idModel.getId().equals("all")) {
             return new ResponseModel("ok", "success", productService.getAllProduct());
         }
         Optional<List<ProductEntity>> product = productService.getAllByCategoryId(idModel);
-        if(product.isPresent()){
+        if (product.isPresent()) {
             return new ResponseModel("ok", "success", productService.getAllByCategoryId(idModel));
         }
         return null;
     }
 
     @PostMapping("/filter-combine")
-    public ResponseModel getAllAlcoholAndCategoryId(@RequestBody FilterCombine filter ){
-         List<ProductEntity>  products = productService.findByAlcoholAndCategoryId(filter);
-       
-            // System.out.println("products " + products);
-            return new ResponseModel("ok", "success", products);
-        
+    public ResponseModel getAllAlcoholAndCategoryId(@Valid @RequestBody FilterCombine filter) {
+        List<ProductEntity> products = productService.findByAlcoholAndCategoryId(filter);
+
+        // System.out.println("products " + products);
+        return new ResponseModel("ok", "success", products);
+
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseModel handleValidationException(MethodArgumentNotValidException exception) {
+        return new ResponseModel("fail", "Validation Error", exception.getMessage());
+    }
 
 }
