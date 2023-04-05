@@ -76,17 +76,16 @@ public class ProductService {
         return productRepository.findByAlcoholLessThanEqual(lever);
     }
 
-    public Optional<List<ProductEntity>> getAllByCategoryId(IdModel idModel){
+    public Optional<List<ProductEntity>> getAllByCategoryId(IdModel idModel) {
         return productRepository.findByCategoryid(idModel.getId());
     }
 
-
     public Optional<List<ProductEntity>> findByProductName(String productName) {
         String name = "%" + productName + "%";
-        return productRepository.findByNameLikeIgnoreCase(name);
+        return productRepository.findByNameLikeIgnoreCaseAndDeletedIsFalse(name);
     }
 
-    public  List<ProductEntity>  findByAlcoholAndCategoryId(FilterCombine alcohol){
+    public List<ProductEntity> findByAlcoholAndCategoryId(FilterCombine alcohol) {
         return productRepository.findByAlcoholLessThanEqualAndCategoryid(alcohol.getAlcohol(), alcohol.getCateid());
     }
 }
